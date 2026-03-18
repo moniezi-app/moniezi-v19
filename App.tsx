@@ -4310,17 +4310,54 @@ const demoMileageTrips: MileageTrip[] = [
     clone.style.maxHeight = 'none';
     clone.style.overflow = 'visible';
     clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
-    clone.style.lineHeight = '1.65';
+    clone.style.fontSize = '15px';
+    clone.style.lineHeight = '2.05';
     clone.style.letterSpacing = '0';
+    clone.style.color = '#111827';
+
+    const style = document.createElement('style');
+    style.textContent = `
+      * { box-sizing: border-box !important; }
+      .truncate {
+        white-space: normal !important;
+        overflow: visible !important;
+        text-overflow: clip !important;
+      }
+      .flex.items-center {
+        align-items: flex-start !important;
+      }
+      .tabular-nums {
+        font-variant-numeric: tabular-nums !important;
+      }
+      p, span, td, th, h1, h2, h3, h4, h5, h6 {
+        line-height: 2.05 !important;
+        padding-bottom: 6px !important;
+      }
+      .text-xs {
+        line-height: 2.1 !important;
+      }
+      .text-sm {
+        line-height: 2.05 !important;
+      }
+      .py-1, .py-1\.5, .py-2, .py-3, .py-4 {
+        padding-top: 12px !important;
+        padding-bottom: 14px !important;
+        min-height: 44px !important;
+      }
+      .border-t, .border-b {
+        overflow: visible !important;
+      }
+    `;
+    clone.prepend(style);
 
     clone.querySelectorAll<HTMLElement>('*').forEach((el) => {
       el.style.textRendering = 'geometricPrecision';
       el.style.webkitFontSmoothing = 'antialiased';
       el.style.overflow = 'visible';
-      if (!el.style.lineHeight || el.style.lineHeight === 'normal') {
-        el.style.lineHeight = '1.6';
-      }
       const className = typeof el.className === 'string' ? el.className : '';
+      if (!el.style.lineHeight || el.style.lineHeight === 'normal') {
+        el.style.lineHeight = '2.05';
+      }
       if (className.includes('truncate')) {
         el.style.whiteSpace = 'normal';
         el.style.overflow = 'visible';
@@ -4332,40 +4369,23 @@ const demoMileageTrips: MileageTrip[] = [
       if (className.includes('items-center')) {
         el.style.alignItems = 'flex-start';
       }
-      if (className.includes('py-1')) {
-        el.style.paddingTop = '10px';
-        el.style.paddingBottom = '10px';
-      }
-      if (className.includes('py-1.5')) {
+      if (className.includes('py-1') || className.includes('py-2') || className.includes('py-3') || className.includes('py-4')) {
         el.style.paddingTop = '12px';
-        el.style.paddingBottom = '12px';
-      }
-      if (className.includes('py-2')) {
-        el.style.paddingTop = '14px';
         el.style.paddingBottom = '14px';
-      }
-      if (className.includes('py-3')) {
-        el.style.paddingTop = '16px';
-        el.style.paddingBottom = '16px';
-      }
-      if (className.includes('py-4')) {
-        el.style.paddingTop = '18px';
-        el.style.paddingBottom = '18px';
+        el.style.minHeight = '44px';
       }
     });
 
-    clone.querySelectorAll<HTMLElement>('p, span, div, td, th, h1, h2, h3, h4, h5, h6').forEach((el) => {
-      el.style.lineHeight = '1.6';
-      el.style.paddingTop = el.style.paddingTop || '1px';
-      el.style.paddingBottom = el.style.paddingBottom || '2px';
+    clone.querySelectorAll<HTMLElement>('div, td, th').forEach((el) => {
+      if (el.children.length === 0) {
+        el.style.lineHeight = '2.05';
+        el.style.paddingBottom = el.style.paddingBottom || '6px';
+      }
     });
 
-    clone.querySelectorAll<HTMLElement>('.text-xs').forEach((el) => {
-      el.style.lineHeight = '1.7';
-    });
-
-    clone.querySelectorAll<HTMLElement>('.text-sm').forEach((el) => {
-      el.style.lineHeight = '1.65';
+    clone.querySelectorAll<HTMLElement>('.text-xs, .text-sm, .text-base').forEach((el) => {
+      el.style.lineHeight = '2.05';
+      el.style.paddingBottom = '6px';
     });
 
     return clone;
