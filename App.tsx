@@ -4304,6 +4304,53 @@ const demoMileageTrips: MileageTrip[] = [
   };
 
 
+  const prepareProfitLossPdfClone = (source: HTMLElement) => {
+    const clone = source.cloneNode(true) as HTMLElement;
+    clone.style.height = 'auto';
+    clone.style.maxHeight = 'none';
+    clone.style.overflow = 'visible';
+    clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
+    clone.style.lineHeight = '1.4';
+
+    clone.querySelectorAll<HTMLElement>('*').forEach((el) => {
+      el.style.textRendering = 'optimizeLegibility';
+      el.style.webkitFontSmoothing = 'antialiased';
+      if (!el.style.lineHeight || el.style.lineHeight === 'normal') {
+        el.style.lineHeight = '1.35';
+      }
+      const className = typeof el.className === 'string' ? el.className : '';
+      if (className.includes('truncate')) {
+        el.style.whiteSpace = 'normal';
+        el.style.overflow = 'visible';
+        el.style.textOverflow = 'clip';
+      }
+      if (className.includes('tabular-nums')) {
+        el.style.fontVariantNumeric = 'tabular-nums';
+      }
+      if (className.includes('py-1')) {
+        el.style.paddingTop = '6px';
+        el.style.paddingBottom = '6px';
+      }
+      if (className.includes('py-1.5')) {
+        el.style.paddingTop = '8px';
+        el.style.paddingBottom = '8px';
+      }
+      if (className.includes('py-2')) {
+        el.style.paddingTop = '9px';
+        el.style.paddingBottom = '9px';
+      }
+    });
+
+    clone.querySelectorAll<HTMLElement>('p, span, div, td, th, h1, h2, h3, h4, h5, h6').forEach((el) => {
+      if (!el.style.lineHeight || el.style.lineHeight === 'normal') {
+        el.style.lineHeight = '1.35';
+      }
+    });
+
+    return clone;
+  };
+
+
   // Share PDF for Profit & Loss (uses Web Share API when available; falls back to download)
   const sharePLPDF = async () => {
     if (isGeneratingPLPdf) return;
@@ -7032,7 +7079,7 @@ html:not(.dark) .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-col
                     Tap <span className="font-bold">Preview &amp; Export</span> to view and export the full Profit &amp; Loss.
                   </div>
 
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-3 mt-4">
                     <div className="p-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
                       <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Revenue</div>
                       <div className="text-lg font-extrabold tabular-nums text-slate-900 dark:text-white mt-1">{formatCurrency.format(proPLData.netRevenue)}</div>
@@ -7044,12 +7091,25 @@ html:not(.dark) .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-col
                     </div>
 
                     <div className="p-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
+                      <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Other Income</div>
+                      <div className={`text-lg font-extrabold tabular-nums mt-1 ${proPLData.netOtherIncome >= 0 ? 'text-slate-900 dark:text-white' : 'text-red-600 dark:text-red-400'}`}>
+                        {formatCurrency.format(proPLData.netOtherIncome)}
+                      </div>
+                    </div>
+
+                    <div className="p-3 rounded-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700">
                       <div className="text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Net Income</div>
                       <div className={`text-lg font-extrabold tabular-nums mt-1 ${proPLData.netIncome >= 0 ? 'text-emerald-600 dark:text-emerald-400' : 'text-red-600 dark:text-red-400'}`}>
                         {formatCurrency.format(proPLData.netIncome)}
                       </div>
                     </div>
                   </div>
+
+                  {Math.abs(proPLData.netOtherIncome) > 0 && (
+                    <div className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                      Net Income includes <span className="font-semibold">Other Income / Expense</span> from the full statement preview.
+                    </div>
+                  )}
                 </div>
               </div>
 
@@ -7958,10 +8018,7 @@ html:not(.dark) .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-col
                               cloneWrapper.style.margin = '0';
                               cloneWrapper.style.zIndex = '-1';
 
-                              const clone = source.cloneNode(true) as HTMLElement;
-                              clone.style.height = 'auto';
-                              clone.style.maxHeight = 'none';
-                              clone.style.overflow = 'visible';
+                              const clone = prepareProfitLossPdfClone(source);
 
                               cloneWrapper.appendChild(clone);
                               document.body.appendChild(cloneWrapper);
@@ -8116,10 +8173,7 @@ html:not(.dark) .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-col
                         cloneWrapper.style.margin = '0';
                         cloneWrapper.style.zIndex = '-1';
 
-                        const clone = source.cloneNode(true) as HTMLElement;
-                        clone.style.height = 'auto';
-                        clone.style.maxHeight = 'none';
-                        clone.style.overflow = 'visible';
+                        const clone = prepareProfitLossPdfClone(source);
 
                         cloneWrapper.appendChild(clone);
                         document.body.appendChild(cloneWrapper);
