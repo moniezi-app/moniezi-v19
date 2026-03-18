@@ -4310,13 +4310,15 @@ const demoMileageTrips: MileageTrip[] = [
     clone.style.maxHeight = 'none';
     clone.style.overflow = 'visible';
     clone.style.fontFamily = 'Arial, Helvetica, sans-serif';
-    clone.style.lineHeight = '1.4';
+    clone.style.lineHeight = '1.65';
+    clone.style.letterSpacing = '0';
 
     clone.querySelectorAll<HTMLElement>('*').forEach((el) => {
-      el.style.textRendering = 'optimizeLegibility';
+      el.style.textRendering = 'geometricPrecision';
       el.style.webkitFontSmoothing = 'antialiased';
+      el.style.overflow = 'visible';
       if (!el.style.lineHeight || el.style.lineHeight === 'normal') {
-        el.style.lineHeight = '1.35';
+        el.style.lineHeight = '1.6';
       }
       const className = typeof el.className === 'string' ? el.className : '';
       if (className.includes('truncate')) {
@@ -4327,24 +4329,43 @@ const demoMileageTrips: MileageTrip[] = [
       if (className.includes('tabular-nums')) {
         el.style.fontVariantNumeric = 'tabular-nums';
       }
+      if (className.includes('items-center')) {
+        el.style.alignItems = 'flex-start';
+      }
       if (className.includes('py-1')) {
-        el.style.paddingTop = '6px';
-        el.style.paddingBottom = '6px';
+        el.style.paddingTop = '10px';
+        el.style.paddingBottom = '10px';
       }
       if (className.includes('py-1.5')) {
-        el.style.paddingTop = '8px';
-        el.style.paddingBottom = '8px';
+        el.style.paddingTop = '12px';
+        el.style.paddingBottom = '12px';
       }
       if (className.includes('py-2')) {
-        el.style.paddingTop = '9px';
-        el.style.paddingBottom = '9px';
+        el.style.paddingTop = '14px';
+        el.style.paddingBottom = '14px';
+      }
+      if (className.includes('py-3')) {
+        el.style.paddingTop = '16px';
+        el.style.paddingBottom = '16px';
+      }
+      if (className.includes('py-4')) {
+        el.style.paddingTop = '18px';
+        el.style.paddingBottom = '18px';
       }
     });
 
     clone.querySelectorAll<HTMLElement>('p, span, div, td, th, h1, h2, h3, h4, h5, h6').forEach((el) => {
-      if (!el.style.lineHeight || el.style.lineHeight === 'normal') {
-        el.style.lineHeight = '1.35';
-      }
+      el.style.lineHeight = '1.6';
+      el.style.paddingTop = el.style.paddingTop || '1px';
+      el.style.paddingBottom = el.style.paddingBottom || '2px';
+    });
+
+    clone.querySelectorAll<HTMLElement>('.text-xs').forEach((el) => {
+      el.style.lineHeight = '1.7';
+    });
+
+    clone.querySelectorAll<HTMLElement>('.text-sm').forEach((el) => {
+      el.style.lineHeight = '1.65';
     });
 
     return clone;
