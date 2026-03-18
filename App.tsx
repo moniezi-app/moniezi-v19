@@ -8522,7 +8522,7 @@ html:not(.dark) .divide-slate-200 > :not([hidden]) ~ :not([hidden]) { border-col
                     <div className="font-semibold text-gray-600 mb-1">Notes</div>
                     <p>• {plAccountingBasis === 'cash' ? 'Cash' : 'Accrual'} Basis | {proPLData.transactionCount} transactions</p>
                     {proPLData.uncategorizedCount > 0 && <p className="text-amber-600">• {proPLData.uncategorizedCount} uncategorized ({formatCurrency.format(proPLData.uncategorizedAmount)})</p>}
-                    <p>• Owner draws excluded | Management report, may not be GAAP-prepared</p>
+                    <p>• Owner draws excluded | Management-use report. For internal business use only.</p>
                   </div>
 
                   {/* Footer */}
